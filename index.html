@@ -112,6 +112,12 @@
         <div class="button-row" id="row-3">
             <!-- Second row of buttons -->
         </div>
+        
+        <!-- Title for Second Row -->
+        <div class="section-title">Games</div>
+        <div class="button-row" id="row-4">
+            <!-- Second row of buttons -->
+        </div>
     </div>
 
     <!-- Custom URL Entry -->
@@ -146,6 +152,11 @@
             { url: "https://addictinggames.com", name: "Addicting Games" },
             { url: "https://dos.zone", name: "Dos Zone" }
         ];
+        
+        // List of URLs for the second row
+        const row4Links = [
+            { url: "https://itch.io/games/free/platform-web", name: "Soundcloudd }
+        ];
 
         // Generate buttons for each row
         function createButtons(links, containerId) {
@@ -168,6 +179,7 @@
         createButtons(row1Links, "row-1");
         createButtons(row2Links, "row-2");
         createButtons(row3Links, "row-3");
+        createButtons(row3Links, "row-4");
 
         // Handle custom URL input
         const loadButton = document.getElementById("load-button");
