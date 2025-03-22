@@ -9,25 +9,31 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            background-color: #f4f4f4; /* Light background color for contrast */
         }
         #button-container {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px;
+            flex-direction: column; /* Arrange buttons vertically */
+            gap: 20px; /* Larger spacing between buttons */
+            align-items: center; /* Center buttons horizontally */
         }
         .button {
-            padding: 10px 20px;
+            padding: 20px 40px; /* Bigger button size */
             border: none;
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 10px; /* Slightly larger corners */
             text-decoration: none;
-            font-size: 16px;
+            font-size: 20px; /* Bigger font for better readability */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for a modern look */
         }
         .button:hover {
-            background-color: #45a049;
+            background-color: #45a049; /* Darker shade on hover */
         }
     </style>
 </head>
