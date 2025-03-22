@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GCD: OSSL - Interactive Televison</title>
+    <title>GCD: OSSL - Interactive Television</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,8 +26,9 @@
             display: inline-block;
         }
         #button-container {
-            display: grid; /* Use grid layout */
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamic columns */
+            display: flex; /* Flex layout for row alignment */
+            flex-wrap: wrap; /* Allow wrapping to form rows when needed */
+            justify-content: center; /* Center buttons horizontally */
             gap: 20px; /* Space between buttons */
             width: 80%; /* Center container width */
         }
@@ -51,7 +52,7 @@
 <body>
     <!-- Banner Section -->
     <div id="banner">
-        <img src="https://via.placeholder.com/800x200" alt="Example Banner"> <!-- Replace URL with actual banner image -->
+        <img src="https://via.placeholder.com/800x200" alt="Example Banner"> <!-- Replace URL with your banner image -->
     </div>
 
     <!-- Button Container -->
@@ -85,4 +86,3 @@
     </script>
 </body>
 </html>
-
