@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="button-container">
+        <!-- Buttons will be dynamically generated here -->
+    </div>
 
+    <script>
+        // List of URLs and their display names
+        const links = [
+            { url: "https://example.com", name: "Example" },
+            { url: "https://github.com", name: "GitHub" },
+            { url: "https://google.com", name: "Google" },
+            { url: "https://bing.com", name: "Bing" }
+        ];
+
+        // Get the button container
+        const container = document.getElementById("button-container");
+
+        // Generate buttons dynamically
+        links.forEach(link => {
+            const button = document.createElement("a");
+            button.href = link.url;
+            button.textContent = link.name;
+            button.className = "button";
+            button.target = "_blank"; // Open link in a new tab
+            container.appendChild(button);
+        });
+    </script>
+</body>
+</html>
