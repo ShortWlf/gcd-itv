@@ -102,8 +102,14 @@
         </div>
 
         <!-- Title for Second Row -->
-        <div class="section-title">Additional Links</div>
+        <div class="section-title">Social Media</div>
         <div class="button-row" id="row-2">
+            <!-- Second row of buttons -->
+        </div>
+        
+        <!-- Title for Second Row -->
+        <div class="section-title">Games</div>
+        <div class="button-row" id="row-3">
             <!-- Second row of buttons -->
         </div>
     </div>
@@ -132,6 +138,11 @@
             { url: "https://vimeo.com/channels", name: "Vimeo" }
         ];
 
+        // List of URLs for the second row
+        const row2Links = [
+            { url: "https://dos.zone", name: "Dos Zone" }
+        ];
+
         // Generate buttons for each row
         function createButtons(links, containerId) {
             const container = document.getElementById(containerId);
@@ -152,6 +163,7 @@
         // Create buttons dynamically
         createButtons(row1Links, "row-1");
         createButtons(row2Links, "row-2");
+        createButtons(row3Links, "row-3");
 
         // Handle custom URL input
         const loadButton = document.getElementById("load-button");
