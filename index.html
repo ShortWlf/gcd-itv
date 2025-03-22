@@ -54,7 +54,7 @@
 <body>
     <!-- Banner Section -->
     <div id="banner">
-        <img src="https://via.placeholder.com/800x200" alt="GCD Banner"> <!-- Replace URL with your banner image -->
+        <img src="https://via.placeholder.com/800x200" alt="GCD Banner"> <!-- Replace with your banner image -->
     </div>
 
     <!-- Button Container -->
@@ -84,8 +84,8 @@
 
             // Add click event to update the media prim's URL
             button.onclick = () => {
-                // Dynamically redirect in Second Life
-                document.location.href = link.url;
+                // Redirect within Second Life's media prim, forcing a refresh
+                window.top.location.href = link.url + "?t=" + new Date().getTime(); // Add timestamp to avoid caching issues
             };
 
             container.appendChild(button);
