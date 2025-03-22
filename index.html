@@ -10,34 +10,52 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Full viewport height */
-            background-color: #f4f4f4; /* Light background color for contrast */
+            background-color: black; /* Black background */
+            color: white; /* White font for contrast */
+        }
+        #banner {
+            width: 100%; /* Full width banner */
+            text-align: center;
+            margin-bottom: 20px; /* Space below the banner */
+        }
+        #banner img {
+            max-width: 80%; /* Image width at 80% of the viewport */
+            height: auto; /* Maintain aspect ratio */
+            display: inline-block;
         }
         #button-container {
             display: flex;
             flex-direction: column; /* Arrange buttons vertically */
-            gap: 20px; /* Larger spacing between buttons */
-            align-items: center; /* Center buttons horizontally */
+            gap: 20px; /* Space between buttons */
+            align-items: center; /* Center horizontally */
         }
         .button {
-            padding: 20px 40px; /* Bigger button size */
+            padding: 30px 60px; /* Bigger buttons */
             border: none;
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            border-radius: 10px; /* Slightly larger corners */
+            border-radius: 10px; /* Rounded corners */
             text-decoration: none;
-            font-size: 20px; /* Bigger font for better readability */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for a modern look */
+            font-size: 24px; /* Larger font size */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
         }
         .button:hover {
-            background-color: #45a049; /* Darker shade on hover */
+            background-color: #45a049; /* Darker green on hover */
         }
     </style>
 </head>
 <body>
+    <!-- Banner Section -->
+    <div id="banner">
+        <img src="https://via.placeholder.com/800x200" alt="Example Banner"> <!-- Replace URL with actual banner image -->
+    </div>
+
+    <!-- Button Container -->
     <div id="button-container">
         <!-- Buttons will be dynamically generated here -->
     </div>
