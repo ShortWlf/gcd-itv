@@ -10,20 +10,20 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
             background-color: black; /* Black background */
             color: white; /* White font for contrast */
             height: 100vh; /* Full viewport height */
         }
         #banner {
-            width: 100%; /* Full width banner */
+            width: 100%; /* Full width banner container */
             text-align: center;
             margin-bottom: 40px; /* Space below the banner */
         }
         #banner img {
-            max-width: 80%; /* Image width at 80% of the viewport */
+            max-width: 50%; /* Image width reduced to fit well */
             height: auto; /* Maintain aspect ratio */
             display: inline-block;
         }
@@ -32,10 +32,10 @@
             flex-wrap: wrap; /* Allow wrapping to form rows when needed */
             justify-content: center; /* Center buttons horizontally */
             gap: 20px; /* Space between buttons */
-            width: 80%; /* Center container width */
+            width: 80%; /* Restrict container width */
         }
         .button {
-            padding: 20px; /* Big button size */
+            padding: 20px 40px; /* Big button size */
             border: none;
             background-color: #4CAF50;
             color: white;
