@@ -124,7 +124,14 @@
         const customUrlInput = document.getElementById("custom-url");
 
         loadButton.onclick = () => {
-            const customUrl = customUrlInput.value;
+            let customUrl = customUrlInput.value.trim();
+
+            // Prepend http:// if not already present
+            if (customUrl && !customUrl.startsWith("http://") && !customUrl.startsWith("https://")) {
+                customUrl = "http://" + customUrl;
+            }
+
+            // Check for empty URL or invalid input
             if (customUrl) {
                 window.top.location.href = customUrl + "?t=" + new Date().getTime(); // Add timestamp to avoid caching issues
             } else {
