@@ -82,9 +82,10 @@
             button.textContent = link.name;
             button.className = "button";
 
-            // Add click event to load and refresh the URL in the same tab
+            // Add click event to update the media prim's URL
             button.onclick = () => {
-                window.location.href = link.url; // Redirect to the URL
+                // Dynamically redirect in Second Life
+                document.location.href = link.url;
             };
 
             container.appendChild(button);
