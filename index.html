@@ -10,56 +10,88 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column; /* Stack items vertically */
-            justify-content: center; /* Center vertically */
-            align-items: center; /* Center horizontally */
-            background-color: black; /* Black background */
-            color: white; /* White font for contrast */
-            height: 100vh; /* Full viewport height */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            height: 100vh;
         }
         #banner {
-            width: 100%; /* Full width banner container */
+            width: 100%;
             text-align: center;
-            margin-bottom: 40px; /* Space below the banner */
+            margin-bottom: 40px;
         }
         #banner img {
-            max-width: 50%; /* Image width reduced to fit well */
-            height: auto; /* Maintain aspect ratio */
+            max-width: 50%;
+            height: auto;
             display: inline-block;
         }
         #button-container {
-            display: flex; /* Flex layout for row alignment */
-            flex-wrap: wrap; /* Allow wrapping to form rows when needed */
-            justify-content: center; /* Center buttons horizontally */
-            gap: 20px; /* Space between buttons */
-            width: 80%; /* Restrict container width */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 80%;
+            margin-bottom: 20px;
         }
         .button {
-            padding: 20px 40px; /* Big button size */
+            padding: 20px 40px;
             border: none;
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            border-radius: 10px; /* Rounded corners */
-            text-decoration: none;
-            font-size: 24px; /* Large font */
-            text-align: center; /* Center text inside button */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
         }
         .button:hover {
-            background-color: #45a049; /* Darker green on hover */
+            background-color: #45a049;
+        }
+        #custom-url-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #custom-url {
+            padding: 10px;
+            font-size: 18px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+        }
+        #load-button {
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #load-button:hover {
+            background-color: #007bb5;
         }
     </style>
 </head>
 <body>
     <!-- Banner Section -->
     <div id="banner">
-        <img src="https://i.imgur.com/DQqs8jD.png" alt="GCD Banner"> <!-- Replace with your banner image -->
+        <img src="https://i.imgur.com/DQqs8jD.png" alt="GCD Banner">
     </div>
 
     <!-- Button Container -->
     <div id="button-container">
         <!-- Buttons will be dynamically generated here -->
+    </div>
+
+    <!-- Custom URL Entry -->
+    <div id="custom-url-container">
+        <input type="text" id="custom-url" placeholder="Enter custom URL here">
+        <button id="load-button">Load URL</button>
     </div>
 
     <script>
@@ -81,12 +113,24 @@
 
             // Add click event to update the media prim's URL
             button.onclick = () => {
-                // Redirect within Second Life's media prim, forcing a refresh
-                window.top.location.href = link.url + "?t=" + new Date().getTime(); // Add timestamp to avoid caching issues
+                window.top.location.href = link.url + "?t=" + new Date().getTime();
             };
 
             container.appendChild(button);
         });
+
+        // Handle custom URL input
+        const loadButton = document.getElementById("load-button");
+        const customUrlInput = document.getElementById("custom-url");
+
+        loadButton.onclick = () => {
+            const customUrl = customUrlInput.value;
+            if (customUrl) {
+                window.top.location.href = customUrl + "?t=" + new Date().getTime(); // Add timestamp to avoid caching issues
+            } else {
+                alert("Please enter a valid URL.");
+            }
+        };
     </script>
 </body>
 </html>
