@@ -60,7 +60,7 @@
             background-color: #45a049;
         }
         #custom-url-container, #add-link-container {
-            display: flex;
+            display: none; /* Initially hidden */
             gap: 10px;
             justify-content: center;
             align-items: center;
@@ -82,7 +82,7 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #load-button:hover, #add-link-button:hover {
+        #load-button:hover, #add-link-button:hover, #toggle-custom-url:hover, #toggle-add-link:hover {
             background-color: #007bb5;
         }
         select {
@@ -112,6 +112,10 @@
         <div class="section-title">Games</div>
         <div class="button-row" id="row-4"></div>
     </div>
+
+    <!-- Buttons to Toggle Features -->
+    <button id="toggle-custom-url" class="button">Custom URL</button>
+    <button id="toggle-add-link" class="button">Add Button</button>
 
     <!-- Custom URL Entry -->
     <div id="custom-url-container">
@@ -192,6 +196,18 @@
                 createButtons(links, category);
             });
         });
+
+        // Toggle Custom URL Section
+        document.getElementById("toggle-custom-url").onclick = () => {
+            const customUrlContainer = document.getElementById("custom-url-container");
+            customUrlContainer.style.display = customUrlContainer.style.display === "none" ? "flex" : "none";
+        };
+
+        // Toggle Add Link Section
+        document.getElementById("toggle-add-link").onclick = () => {
+            const addLinkContainer = document.getElementById("add-link-container");
+            addLinkContainer.style.display = addLinkContainer.style.display === "none" ? "flex" : "none";
+        };
 
         // Add a new link
         document.getElementById("add-link-button").onclick = () => {
