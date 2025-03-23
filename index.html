@@ -59,21 +59,21 @@
         .button:hover {
             background-color: #45a049;
         }
-        #custom-url-container {
+        #custom-url-container, #add-link-container {
             display: flex;
             gap: 10px;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
-        #custom-url {
+        #custom-url, #custom-link-name, #custom-link-url {
             padding: 10px;
             font-size: 18px;
             width: 300px;
             border: none;
             border-radius: 5px;
         }
-        #load-button {
+        #load-button, #add-link-button {
             padding: 10px 20px;
             background-color: #008CBA;
             color: white;
@@ -82,8 +82,13 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #load-button:hover {
+        #load-button:hover, #add-link-button:hover {
             background-color: #007bb5;
+        }
+        select {
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -95,29 +100,30 @@
 
     <!-- Button Section -->
     <div id="button-container">
-        <!-- Title for First Row -->
         <div class="section-title">Streaming Services</div>
-        <div class="button-row" id="row-1">
-            <!-- First row of buttons -->
-        </div>
+        <div class="button-row" id="row-1"></div>
 
-        <!-- Title for Second Row -->
         <div class="section-title">Social Media</div>
-        <div class="button-row" id="row-2">
-            <!-- Second row of buttons -->
-        </div>
+        <div class="button-row" id="row-2"></div>
         
-        <!-- Title for Second Row -->
         <div class="section-title">Music</div>
-        <div class="button-row" id="row-3">
-            <!-- Second row of buttons -->
-        </div>
+        <div class="button-row" id="row-3"></div>
         
-        <!-- Title for Second Row -->
         <div class="section-title">Games</div>
-        <div class="button-row" id="row-4">
-            <!-- Second row of buttons -->
-        </div>
+        <div class="button-row" id="row-4"></div>
+    </div>
+
+    <!-- Add New Link Section -->
+    <div id="add-link-container">
+        <input type="text" id="custom-link-name" placeholder="Enter button name">
+        <input type="text" id="custom-link-url" placeholder="Enter URL">
+        <select id="link-category">
+            <option value="row-1">Streaming Services</option>
+            <option value="row-2">Social Media</option>
+            <option value="row-3">Music</option>
+            <option value="row-4">Games</option>
+        </select>
+        <button id="add-link-button">Add Link</button>
     </div>
 
     <!-- Custom URL Entry -->
@@ -127,80 +133,89 @@
     </div>
 
     <script>
-        // List of URLs for the first row
-        const row1Links = [
-            { url: "https://pluto.tv", name: "Pluto TV" },
-            { url: "https://tubitv.com", name: "Tubi TV" },
-            { url: "https://play.xumo.com/live-guide/", name: "Xumo" },
-            { url: "https://popcornflix.com/?form=MG0AV3/", name: "Popcornflix" },
-            { url: "https://abcnews.go.com/Live", name: "ABC News" }
+        // Load default links
+        const defaultLinks = {
+            "row-1": [
+                { name: "Pluto TV", url: "https://pluto.tv" },
+                { name: "Tubi TV", url: "https://tubitv.com" },
+                { name: "Xumo", url: "https://play.xumo.com/live-guide/" },
+                { name: "Popcornflix", url: "https://popcornflix.com/?form=MG0AV3/" },
+                { name: "ABC News", url: "https://abcnews.go.com/Live" }
+            ],
+            "row-2": [
+                { name: "YouTube", url: "https://youtube.com" },
+                { name: "Twitch TV", url: "https://twitch.tv" },
+                { name: "TikTok", url: "https://www.tiktok.com/en/" },
+                { name: "Dailymotion", url: "https://www.dailymotion.com/us" },
+                { name: "Vimeo", url: "https://vimeo.com/channels" }
+            ],
+            "row-3": [
+                { name: "Soundcloud", url: "https://soundcloud.com" },
+                { name: "Bandcamp", url: "https://bandcamp.com/discover" },
+                { name: "Mixcloud", url: "https://www.mixcloud.com/genres" }
+            ],
+            "row-4": [
+                { name: "Itch Io", url: "https://itch.io/games/free/platform-web" },
+                { name: "Addicting Games", url: "https://addictinggames.com" },
+                { name: "Dos Zone", url: "https://dos.zone" }
+            ]
+        };
 
-        ];
+        // Save to localStorage
+        function saveLinks(category, links) {
+            localStorage.setItem(category, JSON.stringify(links));
+        }
 
-        // List of URLs for the second row
-        const row2Links = [
-            { url: "https://youtube.com", name: "YouTube" },
-            { url: "https://twitch.tv", name: "Twitch TV" },
-            { url: "https://www.tiktok.com/en/", name: "TikTok" },
-            { url: "https://www.dailymotion.com/us", name: "Dailymotion" },
-            { url: "https://vimeo.com/channels", name: "Vimeo" }
-        ];
+        // Load from localStorage
+        function loadLinks(category) {
+            const storedLinks = localStorage.getItem(category);
+            return storedLinks ? JSON.parse(storedLinks) : defaultLinks[category];
+        }
 
-        // List of URLs for the second row
-        const row3Links = [
-            { url: "https://soundcloud.com", name: "Soundcloud" },
-            { url: "https://bandcamp.com/discover", name: "Bandcamp" },
-            { url: "https://www.mixcloud.com/genres", name: "Mixcloud" }
-        ];
-        
-        // List of URLs for the second row
-        const row4Links = [
-            { url: "https://itch.io/games/free/platform-web", name: "Itch Io" },
-            { url: "https://addictinggames.com", name: "Addicting Games" },
-            { url: "https://dos.zone", name: "Dos Zone" }
-        ];
-
-        // Generate buttons for each row
+        // Create Buttons
         function createButtons(links, containerId) {
             const container = document.getElementById(containerId);
+            container.innerHTML = ""; // Clear existing buttons
             links.forEach(link => {
                 const button = document.createElement("button");
                 button.textContent = link.name;
                 button.className = "button";
-
-                // Add click event to update the media prim's URL
-                button.onclick = () => {
-                    window.top.location.href = link.url + "?t=" + new Date().getTime();
-                };
-
+                button.onclick = () => window.top.location.href = `${link.url}?t=${new Date().getTime()}`;
                 container.appendChild(button);
             });
         }
 
-        // Create buttons dynamically
-        createButtons(row1Links, "row-1");
-        createButtons(row2Links, "row-2");
-        createButtons(row3Links, "row-3");
-        createButtons(row4Links, "row-4");
+        // Load buttons on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
+                const links = loadLinks(category);
+                createButtons(links, category);
+            });
+        });
 
-        // Handle custom URL input
-        const loadButton = document.getElementById("load-button");
-        const customUrlInput = document.getElementById("custom-url");
+        // Add a new link
+        document.getElementById("add-link-button").onclick = () => {
+            const name = document.getElementById("custom-link-name").value.trim();
+            let url = document.getElementById("custom-link-url").value.trim();
+            const category = document.getElementById("link-category").value;
 
-        loadButton.onclick = () => {
-            let customUrl = customUrlInput.value.trim();
-
-            // Prepend http:// if not already present
-            if (customUrl && !customUrl.startsWith("http://") && !customUrl.startsWith("https://")) {
-                customUrl = "http://" + customUrl;
+            if (!name || !url) {
+                alert("Please enter both a name and a URL.");
+                return;
             }
 
-            // Check for empty URL or invalid input
-            if (customUrl) {
-                window.top.location.href = customUrl + "?t=" + new Date().getTime(); // Add timestamp to avoid caching issues
-            } else {
-                alert("Please enter a valid URL.");
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = `http://${url}`;
             }
+
+            const links = loadLinks(category);
+            links.push({ name, url });
+            saveLinks(category, links);
+            createButtons(links, category);
+
+            // Clear input fields
+            document.getElementById("custom-link-name").value = "";
+            document.getElementById("custom-link-url").value = "";
         };
     </script>
 </body>
