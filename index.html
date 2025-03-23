@@ -212,24 +212,28 @@
                 button.className = "button";
                 button.onclick = () => window.top.location.href = `${link.url}?t=${new Date().getTime()}`;
 
-                const removeButton = document.createElement("button");
-                removeButton.textContent = "Remove";
-                removeButton.className = "button";
-                removeButton.style.backgroundColor = "#FF4500"; // Red remove button
-                removeButton.onclick = () => {
-                    links.splice(index, 1); // Remove button
-                    saveLinks(containerId, links); // Update localStorage
-                    createButtons(links, containerId); // Refresh UI
-                };
+                if (document.getElementById("remove-buttons-container").style.display === "flex") {
+                    const removeButton = document.createElement("button");
+                    removeButton.textContent = "Remove";
+                    removeButton.className = "button";
+                    removeButton.style.backgroundColor = "#FF4500"; // Red remove button
+                    removeButton.onclick = () => {
+                        links.splice(index, 1); // Remove button
+                        saveLinks(containerId, links); // Update localStorage
+                        createButtons(links, containerId); // Refresh UI
+                    };
 
-                const buttonWrapper = document.createElement("div");
-                buttonWrapper.style.display = "flex";
-                buttonWrapper.style.alignItems = "center";
-                buttonWrapper.style.gap = "10px";
-                buttonWrapper.appendChild(button);
-                buttonWrapper.appendChild(removeButton);
+                    const buttonWrapper = document.createElement("div");
+                    buttonWrapper.style.display = "flex";
+                    buttonWrapper.style.alignItems = "center";
+                    buttonWrapper.style.gap = "10px";
+                    buttonWrapper.appendChild(button);
+                    buttonWrapper.appendChild(removeButton);
 
-                container.appendChild(buttonWrapper);
+                    container.appendChild(buttonWrapper);
+                } else {
+                    container.appendChild(button);
+                }
             });
         }
 
@@ -262,6 +266,12 @@
         document.getElementById("toggle-remove-buttons").onclick = () => {
             const removeButtonsContainer = document.getElementById("remove-buttons-container");
             removeButtonsContainer.style.display = removeButtonsContainer.style.display === "none" ? "flex" : "none";
+
+            // Refresh buttons for all categories to show/remove "Remove" functionality dynamically
+            ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
+                const links = loadLinks(category);
+                createButtons(links, category);
+            });
         };
 
         // Load URL functionality with improved validation
@@ -315,3 +325,4 @@
     </script>
 </body>
 </html>
+
