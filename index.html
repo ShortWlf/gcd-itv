@@ -59,8 +59,11 @@
         .button:hover {
             background-color: #45a049;
         }
-        #custom-url-container, #add-link-container, #remove-buttons-container {
-            display: none; /* Initially hidden */
+        .hidden {
+            display: none;
+        }
+        .flex {
+            display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
@@ -123,13 +126,13 @@
     </div>
 
     <!-- Custom URL Entry -->
-    <div id="custom-url-container">
+    <div id="custom-url-container" class="hidden">
         <input type="text" id="custom-url" placeholder="Enter custom URL here">
         <button id="load-button">Load URL</button>
     </div>
 
     <!-- Add New Link Section -->
-    <div id="add-link-container">
+    <div id="add-link-container" class="hidden">
         <input type="text" id="custom-link-name" placeholder="Enter button name">
         <input type="text" id="custom-link-url" placeholder="Enter URL">
         <select id="link-category">
@@ -142,20 +145,11 @@
     </div>
 
     <!-- Remove Buttons Section -->
-    <div id="remove-buttons-container">
+    <div id="remove-buttons-container" class="hidden">
         <p>Click any button to remove it.</p>
     </div>
 
     <script>
-        // Initialize visibility for toggle sections
-        function initializeVisibility(elementId) {
-            const element = document.getElementById(elementId);
-            if (element.style.display === "") {
-                element.style.display = "none"; // Explicitly set display to "none"
-            }
-        }
-
-        // Default links
         const defaultLinks = {
             "row-1": [
                 { name: "Pluto TV", url: "https://pluto.tv" },
@@ -183,65 +177,65 @@
             ]
         };
 
-        // Save to localStorage
+        let cachedLinks = {};
+
+        function loadLinks(category) {
+            if (cachedLinks[category]) return cachedLinks[category];
+            const storedLinks = localStorage.getItem(category);
+            const links = storedLinks ? JSON.parse(storedLinks) : defaultLinks[category];
+            cachedLinks[category] = links;
+            return links;
+        }
+
         function saveLinks(category, links) {
+            cachedLinks[category] = links;
             localStorage.setItem(category, JSON.stringify(links));
         }
 
-        // Load from localStorage
-        function loadLinks(category) {
-            const storedLinks = localStorage.getItem(category);
-            return storedLinks ? JSON.parse(storedLinks) : defaultLinks[category];
-        }
-
-        // Reset to Default
-        document.getElementById("reset-button").onclick = () => {
-            Object.keys(defaultLinks).forEach(category => {
-                saveLinks(category, defaultLinks[category]); // Reset to default
-                createButtons(defaultLinks[category], category); // Refresh UI
-            });
-        };
-
-        // Create buttons
         function createButtons(links, containerId) {
             const container = document.getElementById(containerId);
-            container.innerHTML = ""; // Clear existing buttons
+            container.innerHTML = "";
+            const fragment = document.createDocumentFragment();
             links.forEach((link, index) => {
                 const button = document.createElement("button");
                 button.textContent = link.name;
                 button.className = "button";
                 button.onclick = () => window.top.location.href = `${link.url}?t=${new Date().getTime()}`;
-
-                if (document.getElementById("remove-buttons-container").style.display === "flex") {
+                if (document.getElementById("remove-buttons-container").classList.contains("flex")) {
                     const removeButton = document.createElement("button");
                     removeButton.textContent = "Remove";
                     removeButton.className = "button";
-                    removeButton.style.backgroundColor = "#FF4500"; // Red remove button
+                    removeButton.style.backgroundColor = "#FF4500";
                     removeButton.onclick = () => {
-                        links.splice(index, 1); // Remove button
-                        saveLinks(containerId, links); // Update localStorage
-                        createButtons(links, containerId); // Refresh UI
+                        links.splice(index, 1);
+                        saveLinks(containerId, links);
+                        createButtons(links, containerId);
                     };
-
-                    const buttonWrapper = document.createElement("div");
-                    buttonWrapper.style.display = "flex";
-                    buttonWrapper.style.alignItems = "center";
-                    buttonWrapper.style.gap = "10px";
-                    buttonWrapper.appendChild(button);
-                    buttonWrapper.appendChild(removeButton);
-
-                    container.appendChild(buttonWrapper);
+                    const wrapper = document.createElement("div");
+                    wrapper.style.display = "flex";
+                    wrapper.style.alignItems = "center";
+                    wrapper.style.gap = "10px";
+                    wrapper.appendChild(button);
+                    wrapper.appendChild(removeButton);
+                    fragment.appendChild(wrapper);
                 } else {
-                    container.appendChild(button);
+                    fragment.appendChild(button);
                 }
             });
+            container.appendChild(fragment);
         }
 
-        // Initialize visibility on page load
+        function toggleElement(elementId, show) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle("hidden", !show);
+            element.classList.toggle("flex", show);
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
-            initializeVisibility("custom-url-container");
-            initializeVisibility("add-link-container");
-            initializeVisibility("remove-buttons-container");
+            // Initialize visibility for toggleable sections
+            toggleElement("custom-url-container", false);
+            toggleElement("add-link-container", false);
+            toggleElement("remove-buttons-container", false);
 
             // Load default buttons for each category
             ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
@@ -253,28 +247,31 @@
         // Toggle Custom URL Section
         document.getElementById("toggle-custom-url").onclick = () => {
             const customUrlContainer = document.getElementById("custom-url-container");
-            customUrlContainer.style.display = customUrlContainer.style.display === "none" ? "flex" : "none";
+            const isShown = !customUrlContainer.classList.contains("flex");
+            toggleElement("custom-url-container", isShown);
         };
 
         // Toggle Add Link Section
         document.getElementById("toggle-add-link").onclick = () => {
             const addLinkContainer = document.getElementById("add-link-container");
-            addLinkContainer.style.display = addLinkContainer.style.display === "none" ? "flex" : "none";
+            const isShown = !addLinkContainer.classList.contains("flex");
+            toggleElement("add-link-container", isShown);
         };
 
         // Toggle Remove Buttons Section
         document.getElementById("toggle-remove-buttons").onclick = () => {
             const removeButtonsContainer = document.getElementById("remove-buttons-container");
-            removeButtonsContainer.style.display = removeButtonsContainer.style.display === "none" ? "flex" : "none";
+            const isShown = !removeButtonsContainer.classList.contains("flex");
+            toggleElement("remove-buttons-container", isShown);
 
-            // Refresh buttons for all categories to show/remove "Remove" functionality dynamically
+            // Refresh buttons dynamically to add or remove "Remove" functionality
             ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
                 const links = loadLinks(category);
                 createButtons(links, category);
             });
         };
 
-        // Load URL functionality with improved validation
+        // Load URL functionality with validation
         document.getElementById("load-button").onclick = () => {
             let customUrl = document.getElementById("custom-url").value.trim();
 
@@ -285,7 +282,7 @@
 
             try {
                 // Validate URL structure
-                new URL(customUrl); // Throws an error if the URL is invalid
+                new URL(customUrl); // Throws an error if invalid
                 window.top.location.href = customUrl + "?t=" + new Date().getTime(); // Add timestamp to avoid caching
             } catch (error) {
                 alert("Please enter a valid and complete URL (e.g., https://example.com).");
@@ -309,7 +306,7 @@
 
             try {
                 // Validate URL structure
-                new URL(url); // Throws an error if the URL is invalid
+                new URL(url); // Throws an error if invalid
                 const links = loadLinks(category);
                 links.push({ name, url });
                 saveLinks(category, links);
@@ -321,6 +318,14 @@
             } catch (error) {
                 alert("Please enter a valid and complete URL (e.g., https://example.com).");
             }
+        };
+
+        // Reset all links to default
+        document.getElementById("reset-button").onclick = () => {
+            Object.keys(defaultLinks).forEach(category => {
+                saveLinks(category, defaultLinks[category]); // Reset to default
+                createButtons(defaultLinks[category], category); // Refresh UI
+            });
         };
     </script>
 </body>
