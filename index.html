@@ -59,7 +59,7 @@
         .button:hover {
             background-color: #45a049;
         }
-        #custom-url-container, #add-link-container {
+        #custom-url-container, #add-link-container, #remove-buttons-container {
             display: none; /* Initially hidden */
             flex-direction: row;
             justify-content: center;
@@ -74,7 +74,7 @@
             border: none;
             border-radius: 5px;
         }
-        #load-button, #add-link-button {
+        #load-button, #add-link-button, #reset-button {
             padding: 10px 20px;
             background-color: #008CBA;
             color: white;
@@ -83,7 +83,7 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #load-button:hover, #add-link-button:hover, #toggle-custom-url:hover, #toggle-add-link:hover {
+        #load-button:hover, #add-link-button:hover, #reset-button:hover, #toggle-custom-url:hover, #toggle-add-link:hover, #toggle-remove-buttons:hover {
             background-color: #007bb5;
         }
         select {
@@ -118,6 +118,8 @@
     <div class="button-row">
         <button id="toggle-custom-url" class="button">Custom URL</button>
         <button id="toggle-add-link" class="button">Add Button</button>
+        <button id="toggle-remove-buttons" class="button">Remove Buttons</button>
+        <button id="reset-button" class="button">Reset to Default</button>
     </div>
 
     <!-- Custom URL Entry -->
@@ -139,6 +141,11 @@
         <button id="add-link-button">Add Link</button>
     </div>
 
+    <!-- Remove Buttons Section -->
+    <div id="remove-buttons-container">
+        <p>Click any button to remove it.</p>
+    </div>
+
     <script>
         // Initialize visibility for toggle sections
         function initializeVisibility(elementId) {
@@ -148,7 +155,7 @@
             }
         }
 
-        // Load default links
+        // Default links
         const defaultLinks = {
             "row-1": [
                 { name: "Pluto TV", url: "https://pluto.tv" },
@@ -187,7 +194,15 @@
             return storedLinks ? JSON.parse(storedLinks) : defaultLinks[category];
         }
 
-        // Create buttons with remove functionality
+        // Reset to Default
+        document.getElementById("reset-button").onclick = () => {
+            Object.keys(defaultLinks).forEach(category => {
+                saveLinks(category, defaultLinks[category]); // Reset to default
+                createButtons(defaultLinks[category], category); // Refresh UI
+            });
+        };
+
+        // Create buttons
         function createButtons(links, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = ""; // Clear existing buttons
@@ -202,9 +217,9 @@
                 removeButton.className = "button";
                 removeButton.style.backgroundColor = "#FF4500"; // Red remove button
                 removeButton.onclick = () => {
-                    links.splice(index, 1);
-                    saveLinks(containerId, links);
-                    createButtons(links, containerId);
+                    links.splice(index, 1); // Remove button
+                    saveLinks(containerId, links); // Update localStorage
+                    createButtons(links, containerId); // Refresh UI
                 };
 
                 const buttonWrapper = document.createElement("div");
@@ -222,7 +237,13 @@
         document.addEventListener("DOMContentLoaded", () => {
             initializeVisibility("custom-url-container");
             initializeVisibility("add-link-container");
-            ["row-1", "row-2", "row-3", "row-4"].forEach(category => createButtons(loadLinks(category), category));
+            initializeVisibility("remove-buttons-container");
+
+            // Load default buttons for each category
+            ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
+                const links = loadLinks(category);
+                createButtons(links, category);
+            });
         });
 
         // Toggle Custom URL Section
@@ -235,6 +256,12 @@
         document.getElementById("toggle-add-link").onclick = () => {
             const addLinkContainer = document.getElementById("add-link-container");
             addLinkContainer.style.display = addLinkContainer.style.display === "none" ? "flex" : "none";
+        };
+
+        // Toggle Remove Buttons Section
+        document.getElementById("toggle-remove-buttons").onclick = () => {
+            const removeButtonsContainer = document.getElementById("remove-buttons-container");
+            removeButtonsContainer.style.display = removeButtonsContainer.style.display === "none" ? "flex" : "none";
         };
 
         // Load URL functionality with improved validation
