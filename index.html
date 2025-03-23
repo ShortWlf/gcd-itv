@@ -140,6 +140,14 @@
     </div>
 
     <script>
+        // Initialize visibility for toggle sections
+        function initializeVisibility(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.style.display === "") {
+                element.style.display = "none"; // Explicitly set display to "none"
+            }
+        }
+
         // Load default links
         const defaultLinks = {
             "row-1": [
@@ -179,25 +187,42 @@
             return storedLinks ? JSON.parse(storedLinks) : defaultLinks[category];
         }
 
-        // Create Buttons
+        // Create buttons with remove functionality
         function createButtons(links, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = ""; // Clear existing buttons
-            links.forEach(link => {
+            links.forEach((link, index) => {
                 const button = document.createElement("button");
                 button.textContent = link.name;
                 button.className = "button";
                 button.onclick = () => window.top.location.href = `${link.url}?t=${new Date().getTime()}`;
-                container.appendChild(button);
+
+                const removeButton = document.createElement("button");
+                removeButton.textContent = "Remove";
+                removeButton.className = "button";
+                removeButton.style.backgroundColor = "#FF4500"; // Red remove button
+                removeButton.onclick = () => {
+                    links.splice(index, 1);
+                    saveLinks(containerId, links);
+                    createButtons(links, containerId);
+                };
+
+                const buttonWrapper = document.createElement("div");
+                buttonWrapper.style.display = "flex";
+                buttonWrapper.style.alignItems = "center";
+                buttonWrapper.style.gap = "10px";
+                buttonWrapper.appendChild(button);
+                buttonWrapper.appendChild(removeButton);
+
+                container.appendChild(buttonWrapper);
             });
         }
 
-        // Load buttons on page load
+        // Initialize visibility on page load
         document.addEventListener("DOMContentLoaded", () => {
-            ["row-1", "row-2", "row-3", "row-4"].forEach(category => {
-                const links = loadLinks(category);
-                createButtons(links, category);
-            });
+            initializeVisibility("custom-url-container");
+            initializeVisibility("add-link-container");
+            ["row-1", "row-2", "row-3", "row-4"].forEach(category => createButtons(loadLinks(category), category));
         });
 
         // Toggle Custom URL Section
