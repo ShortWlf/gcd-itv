@@ -212,6 +212,24 @@
             addLinkContainer.style.display = addLinkContainer.style.display === "none" ? "flex" : "none";
         };
 
+        // Load URL functionality with improved validation
+        document.getElementById("load-button").onclick = () => {
+            let customUrl = document.getElementById("custom-url").value.trim();
+
+            // Ensure the URL is properly formatted
+            if (customUrl && !customUrl.match(/^https?:\/\//)) {
+                customUrl = "http://" + customUrl; // Add "http://" if not present
+            }
+
+            try {
+                // Validate URL structure
+                new URL(customUrl); // Throws an error if the URL is invalid
+                window.top.location.href = customUrl + "?t=" + new Date().getTime(); // Add timestamp to avoid caching
+            } catch (error) {
+                alert("Please enter a valid and complete URL (e.g., https://example.com).");
+            }
+        };
+
         // Add a new link
         document.getElementById("add-link-button").onclick = () => {
             const name = document.getElementById("custom-link-name").value.trim();
@@ -227,14 +245,20 @@
                 url = `http://${url}`;
             }
 
-            const links = loadLinks(category);
-            links.push({ name, url });
-            saveLinks(category, links);
-            createButtons(links, category);
+            try {
+                // Validate URL structure
+                new URL(url); // Throws an error if the URL is invalid
+                const links = loadLinks(category);
+                links.push({ name, url });
+                saveLinks(category, links);
+                createButtons(links, category);
 
-            // Clear input fields
-            document.getElementById("custom-link-name").value = "";
-            document.getElementById("custom-link-url").value = "";
+                // Clear input fields
+                document.getElementById("custom-link-name").value = "";
+                document.getElementById("custom-link-url").value = "";
+            } catch (error) {
+                alert("Please enter a valid and complete URL (e.g., https://example.com).");
+            }
         };
     </script>
 </body>
